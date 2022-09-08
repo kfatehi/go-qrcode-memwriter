@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/spf13/afero"
 	"github.com/yeqown/go-qrcode/v2"
 	"github.com/yeqown/go-qrcode/writer/standard/imgkit"
 
@@ -29,18 +30,11 @@ type Writer struct {
 }
 
 // New creates a standard writer.
-func New(filename string, opts ...ImageOption) (*Writer, error) {
-	if _, err := os.Stat(filename); err != nil && os.IsExist(err) {
-		// custom path got: "file exists"
-		log.Printf("could not find path: %s, then save to %s", filename, _defaultFilename)
-		filename = _defaultFilename
-	}
-
-	fd, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+func New(AppFs afero.Fs, filename string, opts ...ImageOption) (*Writer, error) {
+	fd, err := AppFs.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return nil, errors.Wrap(err, "create file failed")
 	}
-
 	return NewWithWriter(fd, opts...), nil
 }
 
