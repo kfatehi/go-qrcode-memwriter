@@ -1,4 +1,4 @@
-module github.com/kfatehi/go_qrcode_memwriter
+module github.com/kfatehi/go-qrcode-memwriter
 
 go 1.17
 
